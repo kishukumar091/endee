@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Knowledge Assistant — upload documents and ask questions powered by Endee vector database and RAG." />
+  <title>AI Knowledge Assistant | Powered by Endee</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- ── ANIMATED BACKGROUND ─────────────────────────── -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ── HEADER ──────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon" aria-hidden="true">⬡</span>
+        <div class="logo-text">
+          <span class="logo-title">KnowledgeAI</span>
+          <span class="logo-sub">Powered by Endee Vector DB</span>
+        </div>
+      </div>
+      <div id="stats-badge" class="stats-badge" title="Endee index stats">
+        <span class="stats-dot"></span>
+        <span id="stats-text">Connecting…</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MAIN ────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- ── LEFT PANEL: Upload ──────────────────────── -->
+    <section class="panel panel-left" aria-labelledby="upload-heading">
+      <div class="panel-header">
+        <h2 id="upload-heading" class="panel-title">
+          <span class="panel-icon">📄</span>
+          Upload Document
+        </h2>
+        <p class="panel-subtitle">PDF or TXT files are supported</p>
+      </div>
+
+      <!-- Drop Zone -->
+      <div
+        id="drop-zone"
+        class="drop-zone"
+        role="button"
+        tabindex="0"
+        aria-label="Click or drag a PDF or TXT file here"
+        aria-describedby="drop-hint"
+      >
+        <div class="drop-icon" aria-hidden="true">☁</div>
+        <p class="drop-label">Drag &amp; drop your file here</p>
+        <p class="drop-or">— or —</p>
+        <label for="file-input" class="btn btn-outline">Browse File</label>
+        <input
+          id="file-input"
+          type="file"
+          accept=".pdf,.txt"
+          class="visually-hidden"
+          aria-label="Select a PDF or TXT file"
+        />
+        <p id="drop-hint" class="drop-hint">Max 20 MB · PDF or TXT</p>
+      </div>
+
+      <!-- Selected file info -->
+      <div id="selected-file" class="selected-file hidden" aria-live="polite">
+        <span class="file-icon" aria-hidden="true">📎</span>
+        <span id="selected-filename" class="file-name"></span>
+        <button id="clear-file-btn" class="btn-icon" aria-label="Remove selected file" title="Remove">✕</button>
+      </div>
+
+      <!-- Upload button -->
+      <button id="upload-btn" class="btn btn-primary" disabled aria-label="Upload and index document">
+        <span class="btn-inner">
+          <span class="btn-icon-left" aria-hidden="true">⬆</span>
+          Upload &amp; Index
+        </span>
+      </button>
+
+      <!-- Upload status -->
+      <div id="upload-status" class="status-msg hidden" role="status" aria-live="polite"></div>
+
+      <!-- Indexed documents log -->
+      <div class="docs-log">
+        <h3 class="docs-log-title">Indexed Documents</h3>
+        <ul id="docs-list" class="docs-list" aria-label="List of indexed documents">
+          <li class="docs-empty">No documents indexed yet.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── RIGHT PANEL: Chat ───────────────────────── -->
+    <section class="panel panel-right" aria-labelledby="chat-heading">
+      <div class="panel-header">
+        <h2 id="chat-heading" class="panel-title">
+          <span class="panel-icon">💬</span>
+          Ask Your Documents
+        </h2>
+        <p class="panel-subtitle">Powered by RAG + Endee semantic search</p>
+      </div>
+
+      <!-- Chat history -->
+      <div id="chat-history" class="chat-history" role="log" aria-live="polite" aria-label="Chat history">
+        <!-- Welcome message -->
+        <div class="chat-message assistant-msg welcome-msg">
+          <div class="msg-avatar" aria-hidden="true">🤖</div>
+          <div class="msg-bubble">
+            <p>Hello! Upload a document on the left, then ask me anything about it.</p>
+            <p style="margin-top:8px; opacity:0.75; font-size:0.82rem;">
+              I use <strong>Endee vector database</strong> to find the most semantically relevant passages, then generate a precise answer.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div class="chat-input-area">
+        <div class="input-wrapper">
+          <textarea
+            id="question-input"
+            class="question-input"
+            placeholder="Ask a question about your documents…"
+            rows="2"
+            aria-label="Your question"
+            maxlength="1000"
+          ></textarea>
+          <div class="char-counter">
+            <span id="char-count">0</span>/1000
+          </div>
+        </div>
+        <button id="ask-btn" class="btn btn-ask" aria-label="Send question">
+          <span aria-hidden="true">➤</span>
+        </button>
+      </div>
+      <p class="input-hint">Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to send</p>
+    </section>
+
+  </main>
+
+  <!-- ── TOAST NOTIFICATIONS ─────────────────────────── -->
+  <div id="toast-container" aria-live="assertive" class="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
